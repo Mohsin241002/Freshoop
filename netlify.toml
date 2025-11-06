@@ -6,6 +6,9 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
@@ -20,3 +23,4 @@
   node_bundler = "esbuild"
   directory = "netlify/functions"
   included_files = ["server/**"]
+  external_node_modules = ["express", "serverless-http", "cors", "dotenv", "@supabase/supabase-js", "bcrypt", "jsonwebtoken", "multer"]
