@@ -3,18 +3,18 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 // Import middleware
-import { requestLogger, errorLogger } from '../server/middleware/logger.js';
-import { errorHandler } from '../server/middleware/errorHandler.js';
-import { sanitizeInput } from '../server/middleware/validation.js';
+import { requestLogger, errorLogger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { sanitizeInput } from './middleware/validation.js';
 
 // Import routes
-import authRoutes from '../server/routes/auth.js';
-import usersRoutes from '../server/routes/users.js';
-import categoriesRoutes from '../server/routes/categories.js';
-import itemsRoutes from '../server/routes/items.js';
-import cartRoutes from '../server/routes/cart.js';
-import ordersRoutes from '../server/routes/orders.js';
-import addressesRoutes from '../server/routes/addresses.js';
+import authRoutes from './routes/auth.js';
+import usersRoutes from './routes/users.js';
+import categoriesRoutes from './routes/categories.js';
+import itemsRoutes from './routes/items.js';
+import cartRoutes from './routes/cart.js';
+import ordersRoutes from './routes/orders.js';
+import addressesRoutes from './routes/addresses.js';
 
 // Load environment variables
 dotenv.config();
