@@ -327,11 +327,32 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 VITE_PEXELS_API_KEY=your_pexels_key
 ```
 
-### Alternative: Vercel/Netlify
+### Alternative: Vercel Deployment
+
+For deploying the frontend to Vercel with Render backend:
+
+1. **Backend:** Already running on Render at https://freshoop.onrender.com
+2. **Frontend:** Deploy to Vercel
+   ```bash
+   cd client
+   npm run build
+   ```
+3. **Set environment variables in Vercel:**
+   ```env
+   VITE_API_URL=https://freshoop.onrender.com/api
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_anon_key
+   VITE_PEXELS_API_KEY=your_pexels_key
+   ```
+
+📖 **Full Vercel deployment guide:** See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions.
+
+### Alternative: Netlify
 
 1. Build the frontend: `cd client && npm run build`
 2. Deploy the `client/dist` folder
-3. Set environment variables in deployment platform
+3. Set environment variables in Netlify dashboard
+4. Configure API URL to point to https://freshoop.onrender.com/api
 
 ### Alternative: Backend on Railway/Heroku
 

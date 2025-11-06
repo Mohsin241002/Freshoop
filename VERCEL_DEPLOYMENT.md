@@ -1,6 +1,6 @@
 # Vercel Deployment Guide for Freshoop
 
-This guide will help you deploy both the frontend (React/Vite) and backend (Express) to Vercel.
+This guide will help you deploy the frontend (React/Vite) to Vercel using the Render backend.
 
 ## Prerequisites
 
@@ -9,32 +9,28 @@ This guide will help you deploy both the frontend (React/Vite) and backend (Expr
 3. A GitHub account (for automatic deployments)
 4. Your Supabase project URL and keys
 5. Your Pexels API key (for image service)
+6. Backend server running on Render at https://freshoop.onrender.com
+
+## Architecture
+
+- **Frontend:** Deployed on Vercel (Static Site)
+- **Backend:** Deployed on Render (Node.js Server)
+- **Database:** Supabase (PostgreSQL)
+- **Storage:** Supabase Storage (for images)
 
 ## Environment Variables
 
-### Client Environment Variables (Frontend)
+### Client Environment Variables (Frontend Only)
 Set these in your Vercel project dashboard under "Environment Variables":
 
 ```
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_API_URL=https://your-project-name.vercel.app/api
+VITE_API_URL=https://freshoop.onrender.com/api
 VITE_PEXELS_API_KEY=your_pexels_api_key
 ```
 
-### Server Environment Variables (Backend)
-Set these in your Vercel project dashboard under "Environment Variables":
-
-```
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_KEY=your_supabase_service_role_key
-JWT_SECRET=your_secure_jwt_secret_key
-PORT=3001
-FRONTEND_URL=https://your-project-name.vercel.app
-NODE_ENV=production
-ADMIN_EMAILS=admin@example.com,another-admin@example.com
-```
+**Note:** No server environment variables are needed on Vercel since the backend is hosted on Render.
 
 ## Deployment Methods
 
@@ -63,10 +59,9 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
    - Vercel will build and deploy your application
    - You'll get a URL like `https://your-project-name.vercel.app`
 
-5. **Update VITE_API_URL:**
-   - After first deployment, update `VITE_API_URL` to point to your Vercel deployment URL
-   - Set it to: `https://your-project-name.vercel.app/api`
-   - Redeploy for changes to take effect
+5. **No additional configuration needed:**
+   - The API URL is already set to use the Render backend
+   - All API requests will be proxied to https://freshoop.onrender.com
 
 ### Method 2: Deploy via Vercel CLI
 
@@ -96,12 +91,6 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
    vercel env add VITE_SUPABASE_ANON_KEY
    vercel env add VITE_API_URL
    vercel env add VITE_PEXELS_API_KEY
-   vercel env add SUPABASE_URL
-   vercel env add SUPABASE_ANON_KEY
-   vercel env add SUPABASE_SERVICE_KEY
-   vercel env add JWT_SECRET
-   vercel env add FRONTEND_URL
-   vercel env add ADMIN_EMAILS
    ```
 
 6. **Deploy to production:**
@@ -111,9 +100,10 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
 
 ## Post-Deployment Steps
 
-1. **Update CORS Settings:**
-   - The server is configured to accept requests from your frontend URL
-   - Verify `FRONTEND_URL` environment variable is set correctly
+1. **Update Render Backend:**
+   - Ensure your Render backend at https://freshoop.onrender.com is running
+   - Update the `FRONTEND_URL` environment variable on Render to include your Vercel URL
+   - Add CORS configuration for your Vercel domain if needed
 
 2. **Update Supabase Authentication:**
    - Go to your Supabase project dashboard
@@ -129,27 +119,30 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
    - Test adding items to cart
    - Test the checkout process
    - Verify admin dashboard access
+   - Check that API requests are reaching the Render backend
 
 4. **Set up Custom Domain (Optional):**
    - Go to Vercel project settings → Domains
    - Add your custom domain
-   - Update environment variables with your custom domain
+   - Update FRONTEND_URL on Render with your custom domain
 
 ## Troubleshooting
 
 ### API Requests Failing
-- Verify `VITE_API_URL` is set correctly to your Vercel deployment URL
-- Check that all server environment variables are set in Vercel dashboard
-- Review Vercel function logs for errors
+- Verify `VITE_API_URL` is set to `https://freshoop.onrender.com/api`
+- Check that the Render backend is running and accessible
+- Review Render logs for backend errors
+- Test the backend directly: `https://freshoop.onrender.com/api/health`
 
 ### Authentication Issues
 - Verify Supabase environment variables are correct
 - Check that redirect URLs are properly configured in Supabase
-- Ensure `JWT_SECRET` is the same across deployments
+- Ensure the Render backend has the correct JWT_SECRET
 
 ### CORS Errors
-- Verify `FRONTEND_URL` environment variable matches your deployment URL
-- Check server logs in Vercel for CORS-related errors
+- Verify Render backend has your Vercel URL in `FRONTEND_URL`
+- Check Render server logs for CORS-related errors
+- Ensure CORS is properly configured on the Render backend
 
 ### Images Not Loading
 - Verify `VITE_PEXELS_API_KEY` is set correctly
@@ -163,9 +156,9 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
 
 ## Monitoring and Logs
 
-- **View Logs:** Go to your Vercel project → Deployments → Click on a deployment → View Function Logs
-- **Runtime Logs:** Check the "Functions" tab for serverless function logs
-- **Build Logs:** Available in the deployment details
+- **Frontend Logs:** Go to your Vercel project → Deployments → Click on a deployment → View Logs
+- **Backend Logs:** Check Render dashboard for your service logs at https://dashboard.render.com
+- **Build Logs:** Available in the Vercel deployment details
 
 ## Automatic Deployments
 
@@ -184,10 +177,10 @@ If you need to roll back to a previous deployment:
 ## Security Notes
 
 1. Never commit `.env` files to Git
-2. Rotate your `JWT_SECRET` periodically
-3. Keep your Supabase service key secure
-4. Use Vercel's environment variable encryption
-5. Review and limit CORS origins in production
+2. Keep your Supabase service key secure (stored only on Render backend)
+3. Rotate your `JWT_SECRET` periodically on the Render backend
+4. Use Vercel's environment variable encryption for frontend env vars
+5. Review and limit CORS origins on the Render backend
 
 ## Performance Optimization
 
@@ -196,15 +189,24 @@ If you need to roll back to a previous deployment:
    - Configure cache headers in `vercel.json` if needed
 
 2. **Monitor Performance:**
-   - Use Vercel Analytics for insights
-   - Monitor serverless function execution times
+   - Use Vercel Analytics for frontend insights
+   - Monitor Render backend performance in Render dashboard
+   - Keep Render service active to avoid cold starts
 
 3. **Optimize Build:**
    - Ensure production builds are minified
    - Remove console.logs in production code
 
+## Architecture Benefits
+
+- **Separation of Concerns:** Frontend and backend are independently deployed
+- **Scalability:** Vercel handles frontend scaling, Render handles backend scaling
+- **Cost-Effective:** No serverless function costs on Vercel
+- **Easy Maintenance:** Update backend without redeploying frontend
+
 ## Support
 
 - [Vercel Documentation](https://vercel.com/docs)
+- [Render Documentation](https://render.com/docs)
 - [Vercel Community](https://github.com/vercel/vercel/discussions)
 - [Supabase Documentation](https://supabase.com/docs)
