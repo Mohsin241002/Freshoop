@@ -97,8 +97,8 @@ export default function AdminDashboard() {
     const response = await itemsApi.getAll();
     const itemsData = response.data.data || response.data;
     const itemsArray = Array.isArray(itemsData) ? itemsData : [];
-    // Force re-render by creating new array
-    setItems([...itemsArray]);
+    // Force re-render by creating new array with timestamp to break reference
+    setItems(itemsArray.map(item => ({ ...item, _loadTimestamp: Date.now() })));
   };
 
   const loadCategories = async () => {
@@ -152,7 +152,12 @@ export default function AdminDashboard() {
       showNotification('success', 'Item updated successfully');
       setShowItemForm(false);
       setEditingItem(null);
-      await loadItems();
+      
+      // Force reload with a small delay
+      setTimeout(async () => {
+        await loadItems();
+        await loadStats();
+      }, 100);
     } catch (error) {
       console.error('Error updating item:', error);
       showNotification('error', error.message || 'Failed to update item');
@@ -175,13 +180,17 @@ export default function AdminDashboard() {
 
   const handleUpdateStock = async (itemId, quantity) => {
     try {
-      await adminService.updateStock(itemId, quantity);
+      const result = await adminService.updateStock(itemId, quantity);
       showNotification('success', 'Stock updated successfully');
-      await loadItems();
-      await loadStats();
-      if (activeTab === 'overview') {
-        await loadLowStockItems();
-      }
+      
+      // Force reload with a small delay to ensure DB is updated
+      setTimeout(async () => {
+        await loadItems();
+        await loadStats();
+        if (activeTab === 'overview') {
+          await loadLowStockItems();
+        }
+      }, 100);
     } catch (error) {
       console.error('Error updating stock:', error);
       showNotification('error', 'Failed to update stock');
@@ -192,7 +201,11 @@ export default function AdminDashboard() {
     try {
       await adminService.toggleAvailability(itemId, isAvailable);
       showNotification('success', `Item ${isAvailable ? 'enabled' : 'disabled'} successfully`);
-      await loadItems();
+      
+      // Force reload with a small delay
+      setTimeout(async () => {
+        await loadItems();
+      }, 100);
     } catch (error) {
       console.error('Error toggling availability:', error);
       showNotification('error', 'Failed to update item availability');
