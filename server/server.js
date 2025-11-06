@@ -28,6 +28,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   process.env.FRONTEND_URL,
+  // Vercel domains
+  /https:\/\/.*\.vercel\.app$/,
   // Render.com domains
   /https:\/\/.*\.onrender\.com$/,
   // Netlify domains (if still needed)
