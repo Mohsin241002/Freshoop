@@ -279,13 +279,61 @@ Make sure the server is running and CORS is enabled in `server/index.js`
 
 ## 🚀 Deployment
 
-### Frontend (Vercel/Netlify)
+### Render.com (Recommended)
+
+Freshoop is optimized for deployment on Render.com with automatic builds and zero-downtime deployments.
+
+#### Quick Deploy to Render
+
+1. **Push to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Deploy to Render"
+   git push origin main
+   ```
+
+2. **Deploy via Render Dashboard:**
+   - Go to [Render Dashboard](https://dashboard.render.com/)
+   - Click "New +" → "Blueprint"
+   - Connect your GitHub repository
+   - Render will detect `render.yaml` and create both services
+   - Add environment variables when prompted
+   - Click "Apply"
+
+3. **Or deploy using the helper script:**
+   ```bash
+   npm run render:deploy
+   ```
+
+📖 **Full deployment guide:** See [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) for detailed instructions.
+
+#### Environment Variables for Render
+
+**Backend Service (freshoop-api):**
+```env
+NODE_ENV=production
+PORT=3001
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_service_key
+JWT_SECRET=your_jwt_secret
+ADMIN_EMAILS=your_admin_email
+```
+
+**Frontend Service (freshoop-client):**
+```env
+VITE_API_URL=https://freshoop-api.onrender.com/api
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
+VITE_PEXELS_API_KEY=your_pexels_key
+```
+
+### Alternative: Vercel/Netlify
 
 1. Build the frontend: `cd client && npm run build`
 2. Deploy the `client/dist` folder
 3. Set environment variables in deployment platform
 
-### Backend (Heroku/Railway/Render)
+### Alternative: Backend on Railway/Heroku
 
 1. Deploy the `server` folder
 2. Set environment variables

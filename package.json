@@ -8,10 +8,13 @@
     "install:server": "cd server && npm install",
     "install:all": "npm run install:client && npm run install:server",
     "build": "cd client && npm run build",
+    "build:server": "cd server && npm install",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "start": "cd server && npm start",
-    "vercel-build": "cd client && npm install && npm run build"
+    "start:server": "cd server && npm start",
+    "vercel-build": "cd client && npm install && npm run build",
+    "render:deploy": "./deploy-render.sh"
   },
   "keywords": ["food-ordering", "e-commerce", "react", "express"],
   "author": "",

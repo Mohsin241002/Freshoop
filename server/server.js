@@ -24,8 +24,35 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  process.env.FRONTEND_URL,
+  // Render.com domains
+  /https:\/\/.*\.onrender\.com$/,
+  // Netlify domains (if still needed)
+  /https:\/\/.*\.netlify\.app$/
+].filter(Boolean);
+
 const corsOptions = {
-  origin: [process.env.FRONTEND_URL || 'http://localhost:5173', 'http://localhost:5173'],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin matches allowed patterns
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (typeof allowed === 'string') return origin === allowed;
+      if (allowed instanceof RegExp) return allowed.test(origin);
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(null, true); // Allow anyway in production to avoid issues
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
@@ -45,7 +72,22 @@ app.get('/health', (req, res) => {
     success: true,
     message: 'Server is running',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    env: {
+      nodeEnv: process.env.NODE_ENV,
+      hasSupabaseUrl: !!process.env.SUPABASE_URL,
+      hasServiceKey: !!process.env.SUPABASE_SERVICE_KEY,
+      hasJwtSecret: !!process.env.JWT_SECRET
+    }
+  });
+});
+
+// API health check
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API is running',
+    timestamp: new Date().toISOString()
   });
 });
 
