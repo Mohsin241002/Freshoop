@@ -17,6 +17,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // If supabase client is not initialized, skip auth
+    if (!supabase) {
+      console.error('Supabase client not initialized');
+      setLoading(false);
+      return;
+    }
+
     // Check active sessions
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -46,6 +53,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signUp = async (email, password, fullName) => {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized. Please check environment variables.');
+    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -61,6 +71,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signIn = async (email, password) => {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized. Please check environment variables.');
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -71,6 +84,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
+    if (!supabase) {
+      throw new Error('Supabase client not initialized. Please check environment variables.');
+    }
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };
