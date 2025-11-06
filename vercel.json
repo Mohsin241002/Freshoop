@@ -1,44 +1,16 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "installCommand": "cd server && npm install",
+  "rewrites": [
     {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "server/package.json",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["server/**"]
-      }
+      "source": "/api/:path*",
+      "destination": "/api"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server/server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "server/server.js"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "client/$1"
-    },
-    {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|eot))",
-      "dest": "client/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "client/index.html"
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 10
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
   }
 }
