@@ -1,124 +1,110 @@
-import { Link, Outlet } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Home, Package } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useCart } from '../contexts/CartContext';
+import { Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
+import { Mail, Phone, MapPin, Heart, Facebook, Twitter, Instagram } from 'lucide-react';
+import logo from '../assets/logo12.png';
 
 export default function Layout() {
-  const { user, signOut } = useAuth();
-  const { getCartItemsCount } = useCart();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
+  console.log('Layout rendering...');
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="text-2xl font-bold text-orange-600">
-              Freshoop
-            </Link>
-
-            <div className="flex items-center gap-6">
-              <Link
-                to="/"
-                className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition"
-              >
-                <Home className="w-5 h-5" />
-                <span className="hidden sm:inline">Home</span>
-              </Link>
-
-              {user && (
-                <>
-                  <Link
-                    to="/orders"
-                    className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition"
-                  >
-                    <Package className="w-5 h-5" />
-                    <span className="hidden sm:inline">Orders</span>
-                  </Link>
-
-                  <Link
-                    to="/cart"
-                    className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition relative"
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    <span className="hidden sm:inline">Cart</span>
-                    {getCartItemsCount() > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        {getCartItemsCount()}
-                      </span>
-                    )}
-                  </Link>
-                </>
-              )}
-
-              {user ? (
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-600 hidden md:inline">
-                    {user.email}
-                  </span>
-                  <button
-                    onClick={handleSignOut}
-                    className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span className="hidden sm:inline">Sign Out</span>
-                  </button>
-                </div>
-              ) : (
-                <Link
-                  to="/auth"
-                  className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
-                >
-                  <User className="w-5 h-5" />
-                  <span>Sign In</span>
-                </Link>
-              )}
-            </div>
-          </div>
-        </nav>
-      </header>
+    <div className="min-h-screen bg-cream-50 flex flex-col">
+      {/* Navbar */}
+      <Navbar />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="flex-1">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white mt-auto">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Freshoop</h3>
-              <p className="text-gray-400">
-                Your online grocery store. Fresh fruits, vegetables, and groceries delivered to your door.
+      <footer className="bg-gradient-to-br from-brand via-brand-600 to-brand-700 text-white relative overflow-hidden mt-20">
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 right-10 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-10 w-80 h-80 bg-cream-100 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 py-16 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* Brand Section */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-6">
+                <img src={logo} alt="Freshoop" className="h-16 w-auto filter brightness-0 invert" />
+                <span className="text-3xl font-extrabold">Freshoop</span>
+              </div>
+              <p className="text-green-50 text-lg mb-6 leading-relaxed">
+                Your online grocery store delivering fresh fruits, vegetables, and quality groceries right to your doorstep in just 30 minutes.
               </p>
+              <div className="flex gap-4">
+                <a href="#" className="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all backdrop-blur-sm border border-white/30">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="#" className="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all backdrop-blur-sm border border-white/30">
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a href="#" className="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all backdrop-blur-sm border border-white/30">
+                  <Instagram className="w-5 h-5" />
+                </a>
+              </div>
             </div>
+
+            {/* Quick Links */}
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="/" className="hover:text-white">Shop</Link></li>
-                <li><Link to="/orders" className="hover:text-white">Orders</Link></li>
-                <li><Link to="/cart" className="hover:text-white">Cart</Link></li>
+              <h4 className="font-bold mb-6 text-xl">Quick Links</h4>
+              <ul className="space-y-3 text-green-50">
+                <li>
+                  <Link to="/" className="hover:text-white transition-colors hover:pl-2 inline-block">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/shop" className="hover:text-white transition-colors hover:pl-2 inline-block">
+                    Shop
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/orders" className="hover:text-white transition-colors hover:pl-2 inline-block">
+                    My Orders
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/cart" className="hover:text-white transition-colors hover:pl-2 inline-block">
+                    Cart
+                  </Link>
+                </li>
               </ul>
             </div>
+
+            {/* Contact */}
             <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <p className="text-gray-400">
-                Email: support@freshoop.com<br />
-                Phone: (555) 123-4567
-              </p>
+              <h4 className="font-bold mb-6 text-xl">Contact Us</h4>
+              <ul className="space-y-4 text-green-50">
+                <li className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <span>support@freshoop.com</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <span>(555) 123-4567</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <span>123 Fresh Street, Grocery City, GC 12345</span>
+                </li>
+              </ul>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Freshoop. All rights reserved.</p>
+
+          {/* Bottom Bar */}
+          <div className="border-t-2 border-white/20 pt-8 mt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-green-50 text-center md:text-left">
+                &copy; 2025 Freshoop. All rights reserved.
+              </p>
+              <p className="text-green-50 flex items-center gap-2">
+                Made with <Heart className="w-4 h-4 fill-red-400 text-red-400" /> for fresh food lovers
+              </p>
+            </div>
           </div>
         </div>
       </footer>

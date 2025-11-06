@@ -168,7 +168,7 @@ export const processCheckout = async (req, res) => {
       // Don't fail checkout if cart clear fails
     }
 
-    // Schedule auto-delivery after 2 minutes
+    // Schedule auto-delivery after 5 minutes
     setTimeout(async () => {
       try {
         await supabase
@@ -179,16 +179,16 @@ export const processCheckout = async (req, res) => {
           })
           .eq('id', order.id);
         
-        console.log(`Order ${order.order_number} auto-delivered after 2 minutes`);
+        console.log(`Order ${order.order_number} auto-delivered after 5 minutes`);
       } catch (error) {
         console.error('Auto-delivery error:', error);
       }
-    }, 2 * 60 * 1000); // 2 minutes in milliseconds
+    }, 5 * 60 * 1000); // 5 minutes in milliseconds
 
     // Return order details
     res.status(201).json({
       success: true,
-      message: 'Order placed successfully! Your order will be delivered in 2 minutes.',
+      message: 'Order placed successfully! Your order will be delivered in 5 minutes.',
       data: {
         order: {
           id: order.id,
@@ -196,7 +196,7 @@ export const processCheckout = async (req, res) => {
           total_amount: order.total_amount,
           status: order.status,
           created_at: order.created_at,
-          estimated_delivery: new Date(Date.now() + 2 * 60 * 1000).toISOString()
+          estimated_delivery: new Date(Date.now() + 5 * 60 * 1000).toISOString()
         },
         items: orderItems
       }
