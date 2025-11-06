@@ -335,7 +335,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lowStockItems.slice(0, 6).map(item => (
                   <AdminItemCard
-                    key={item.id}
+                    key={`${item.id}-${item._loadTimestamp || Date.now()}`}
                     item={item}
                     onEdit={(item) => {
                       setEditingItem(item);
@@ -435,7 +435,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredItems.map(item => (
                 <AdminItemCard
-                  key={item.id}
+                  key={`${item.id}-${item._loadTimestamp || Date.now()}`}
                   item={item}
                   onEdit={(item) => {
                     setEditingItem(item);

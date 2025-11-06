@@ -7,6 +7,9 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   },
 });
 
@@ -48,8 +51,13 @@ export const categoriesApi = {
 
 // Items API
 export const itemsApi = {
-  getAll: (categoryId) => api.get('/items', { params: { category_id: categoryId } }),
-  getById: (id) => api.get(`/items/${id}`),
+  getAll: (categoryId) => api.get('/items', { 
+    params: { 
+      category_id: categoryId,
+      _t: Date.now() // Cache busting
+    } 
+  }),
+  getById: (id) => api.get(`/items/${id}`, { params: { _t: Date.now() } }),
   create: (data) => api.post('/items', data),
   update: (id, data) => api.put(`/items/${id}`, data),
   delete: (id) => api.delete(`/items/${id}`),
