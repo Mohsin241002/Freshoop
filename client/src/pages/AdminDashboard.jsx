@@ -96,7 +96,9 @@ export default function AdminDashboard() {
   const loadItems = async () => {
     const response = await itemsApi.getAll();
     const itemsData = response.data.data || response.data;
-    setItems(Array.isArray(itemsData) ? itemsData : []);
+    const itemsArray = Array.isArray(itemsData) ? itemsData : [];
+    // Force re-render by creating new array
+    setItems([...itemsArray]);
   };
 
   const loadCategories = async () => {
