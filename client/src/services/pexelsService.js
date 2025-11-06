@@ -1,4 +1,4 @@
-const PEXELS_API_KEY = 'imY45DES967sZGy0D3e3wz8XAx6iNXvIzdbzmzDSlQPr5OmZlhNtMedH';
+const PEXELS_API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
 const PEXELS_API_URL = 'https://api.pexels.com/v1';
 
 /**
