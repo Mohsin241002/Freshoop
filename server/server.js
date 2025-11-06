@@ -66,6 +66,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sanitizeInput);
 app.use(requestLogger);
 
+// Root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Freshoop API Server',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/health or /api/health',
+      auth: '/api/auth/*',
+      users: '/api/users/*',
+      categories: '/api/categories',
+      items: '/api/items',
+      cart: '/api/cart',
+      orders: '/api/orders',
+      addresses: '/api/addresses'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -100,11 +121,24 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/addresses', addressesRoutes);
 
-// 404 handler
+// 404 handler - provide helpful error message
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    error: 'Route not found'
+    error: 'Route not found',
+    requestedPath: req.path,
+    requestedMethod: req.method,
+    message: `The route ${req.method} ${req.path} does not exist`,
+    availableRoutes: {
+      root: 'GET /',
+      health: 'GET /health or GET /api/health',
+      auth: 'POST /api/auth/register, POST /api/auth/login',
+      categories: 'GET /api/categories',
+      items: 'GET /api/items',
+      cart: 'GET /api/cart',
+      orders: 'GET /api/orders',
+      addresses: 'GET /api/addresses'
+    }
   });
 });
 
