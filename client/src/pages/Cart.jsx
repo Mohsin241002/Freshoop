@@ -4,12 +4,17 @@ import { useCart } from '../contexts/CartContext';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { ordersApi } from '../lib/api';
 import { useState } from 'react';
+import CheckoutModal from '../components/CheckoutModal';
+import OrderSuccessAnimation from '../components/OrderSuccessAnimation';
 
 export default function Cart() {
   const { user } = useAuth();
   const { cart, updateCartItem, removeFromCart, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   if (!user) {
     return (
@@ -71,12 +76,21 @@ export default function Cart() {
     }
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (deliveryAddressId) => {
     try {
       setLoading(true);
-      const response = await ordersApi.checkout();
-      alert(response.data.message || 'Order placed successfully! Your order will be delivered in 2 minutes.');
-      navigate('/orders');
+      setShowCheckoutModal(false);
+      
+      const response = await ordersApi.checkout({ delivery_address_id: deliveryAddressId });
+      
+      // Store order details
+      setOrderDetails({
+        orderNumber: response.data.data.order.order_number,
+        estimatedDelivery: response.data.data.order.estimated_delivery
+      });
+      
+      // Show success animation
+      setShowSuccessAnimation(true);
     } catch (error) {
       const errorMsg = error.response?.data?.error || error.message;
       const unavailable = error.response?.data?.unavailable_items;
@@ -94,6 +108,12 @@ export default function Cart() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccessAnimation(false);
+    setOrderDetails(null);
+    navigate('/orders');
   };
 
   return (
@@ -171,9 +191,9 @@ export default function Cart() {
                       </button>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-500 mb-1">${item.price.toFixed(2)} each</p>
+                      <p className="text-sm text-gray-500 mb-1">₹{Math.round(item.price)} each</p>
                       <p className="text-brand font-bold text-2xl">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{Math.round(item.price * item.quantity)}
                       </p>
                     </div>
                   </div>
@@ -191,7 +211,7 @@ export default function Cart() {
             <div className="space-y-4 mb-8">
               <div className="flex justify-between text-gray-600 text-lg">
                 <span>Subtotal ({cart.items.length} items)</span>
-                <span className="font-bold text-gray-800">${getCartTotal().toFixed(2)}</span>
+                <span className="font-bold text-gray-800">₹{Math.round(getCartTotal())}</span>
               </div>
               <div className="flex justify-between text-gray-600 text-lg">
                 <span>Delivery Fee</span>
@@ -200,13 +220,13 @@ export default function Cart() {
               <div className="border-t-2 border-cream-200 pt-4 flex justify-between font-bold text-2xl">
                 <span>Total</span>
                 <span className="text-brand">
-                  ${getCartTotal().toFixed(2)}
+                  ₹{Math.round(getCartTotal())}
                 </span>
               </div>
             </div>
 
             <button
-              onClick={handleCheckout}
+              onClick={() => setShowCheckoutModal(true)}
               disabled={loading}
               className="w-full bg-gradient-to-r from-brand to-brand-600 text-white py-5 rounded-2xl hover:from-brand-600 hover:to-brand-700 transition-all disabled:from-gray-400 disabled:to-gray-400 font-bold text-xl shadow-brand hover:shadow-xl mb-4 hover:scale-105"
             >
@@ -229,6 +249,22 @@ export default function Cart() {
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        onConfirm={handleCheckout}
+        cartTotal={getCartTotal()}
+      />
+
+      {/* Success Animation */}
+      <OrderSuccessAnimation
+        isOpen={showSuccessAnimation}
+        onClose={handleSuccessClose}
+        orderNumber={orderDetails?.orderNumber}
+        estimatedDelivery={orderDetails?.estimatedDelivery}
+      />
     </div>
   );
 }

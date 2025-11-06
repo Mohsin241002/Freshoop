@@ -66,10 +66,21 @@ export const cartApi = {
 
 // Orders API
 export const ordersApi = {
-  checkout: () => api.post('/orders/checkout'),
+  checkout: (data) => api.post('/orders/checkout', data),
   getUserOrders: () => api.get('/orders'),
   getByOrderNumber: (orderNumber) => api.get(`/orders/${orderNumber}`),
   updateStatus: (id, status) => api.patch(`/orders/${id}/status`, { status }),
+};
+
+// Addresses API
+export const addressesApi = {
+  getAll: () => api.get('/addresses'),
+  getById: (id) => api.get(`/addresses/${id}`),
+  getDefault: () => api.get('/addresses/default'),
+  create: (data) => api.post('/addresses', data),
+  update: (id, data) => api.put(`/addresses/${id}`, data),
+  delete: (id) => api.delete(`/addresses/${id}`),
+  setDefault: (id) => api.patch(`/addresses/${id}/default`),
 };
 
 // Users API

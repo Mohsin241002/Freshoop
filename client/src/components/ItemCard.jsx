@@ -51,7 +51,7 @@ export default function ItemCard({ item }) {
         )}
         {/* Price Badge */}
         <div className="absolute top-3 right-3 bg-brand text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">
-          ${item.price.toFixed(2)}
+          ₹{Math.round(item.price)}
         </div>
       </div>
 

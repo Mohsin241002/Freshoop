@@ -210,28 +210,34 @@ export default function OrdersList({ orders = [], onUpdateStatus, loading = fals
                           Customer Information
                         </h4>
                         <div className="space-y-2 text-sm">
-                          <div className="flex items-start gap-2">
-                            <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                            <div>
-                              <p className="font-semibold text-gray-900">
-                                {order.delivery_address?.full_name || 'N/A'}
-                              </p>
-                              <p className="text-gray-600">
-                                {order.delivery_address?.address_line1 || 'No address'}
-                              </p>
-                              {order.delivery_address?.address_line2 && (
-                                <p className="text-gray-600">{order.delivery_address.address_line2}</p>
+                          {order.delivery_address ? (
+                            <>
+                              <div className="flex items-start gap-2">
+                                <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="font-semibold text-gray-900">
+                                    {order.delivery_address.name}
+                                  </p>
+                                  <p className="text-gray-600">
+                                    {order.delivery_address.address_line1}
+                                  </p>
+                                  {order.delivery_address.address_line2 && (
+                                    <p className="text-gray-600">{order.delivery_address.address_line2}</p>
+                                  )}
+                                  <p className="text-gray-600">
+                                    {order.delivery_address.city}, {order.delivery_address.state} - {order.delivery_address.pincode}
+                                  </p>
+                                </div>
+                              </div>
+                              {order.delivery_address.phone && (
+                                <div className="flex items-center gap-2">
+                                  <Phone className="w-4 h-4 text-gray-400" />
+                                  <span className="text-gray-700">{order.delivery_address.phone}</span>
+                                </div>
                               )}
-                              <p className="text-gray-600">
-                                {order.delivery_address?.city}, {order.delivery_address?.state} {order.delivery_address?.postal_code}
-                              </p>
-                            </div>
-                          </div>
-                          {order.delivery_address?.phone && (
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-700">{order.delivery_address.phone}</span>
-                            </div>
+                            </>
+                          ) : (
+                            <p className="text-gray-500 italic">No delivery address provided</p>
                           )}
                         </div>
                       </div>

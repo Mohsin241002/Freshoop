@@ -14,6 +14,7 @@ import categoriesRoutes from './routes/categories.js';
 import itemsRoutes from './routes/items.js';
 import cartRoutes from './routes/cart.js';
 import ordersRoutes from './routes/orders.js';
+import addressesRoutes from './routes/addresses.js';
 
 // Load environment variables
 dotenv.config();
@@ -55,6 +56,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/items', itemsRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use('/api/addresses', addressesRoutes);
 
 // 404 handler
 app.use((req, res) => {

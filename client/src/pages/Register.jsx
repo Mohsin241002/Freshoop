@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { UserPlus, Mail, Lock, User, AlertCircle, Loader2, CheckCircle, Package, Truck, Shield } from 'lucide-react';
-import logo from '../assets/logo12.png';
+import logo from '../assets/logo12.jpg';
 
 export default function Register() {
   const [formData, setFormData] = useState({

@@ -12,7 +12,7 @@ import {
   ChevronLeft
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import logo from '../../assets/logo12.png';
+import logo from '../../assets/logo12.jpg';
 
 export default function AdminLayout({ children, activeTab, onTabChange }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

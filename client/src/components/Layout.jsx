@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import { Mail, Phone, MapPin, Heart, Facebook, Twitter, Instagram } from 'lucide-react';
-import logo from '../assets/logo12.png';
+import logo from '../assets/logo12.jpg';
 
 export default function Layout() {
   console.log('Layout rendering...');

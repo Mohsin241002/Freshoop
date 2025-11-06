@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogIn, Mail, Lock, AlertCircle, Loader2, Package, Truck, Shield } from 'lucide-react';
-import logo from '../assets/logo12.png';
+import logo from '../assets/logo12.jpg';
 
 export default function Login() {
   const [email, setEmail] = useState('');

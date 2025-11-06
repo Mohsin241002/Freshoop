@@ -3,7 +3,7 @@ import { ShoppingCart, Package, User, Menu, X, Home as HomeIcon, Store } from 'l
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useState } from 'react';
-import logo from '../assets/logo12.png';
+import logo from '../assets/logo12.jpg';
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
@@ -28,12 +28,12 @@ export default function Navbar() {
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-brand/10">
-      <nav className="container mx-auto px-4 py-4">
+      <nav className="container mx-auto px-4 py-1">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group -my-2"
           >
             <div className="relative">
               <img
@@ -43,9 +43,6 @@ export default function Navbar() {
               />
               <div className="absolute inset-0 bg-brand/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
-            <span className="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-brand to-brand-700 bg-clip-text text-transparent hidden sm:block">
-              Freshoop
-            </span>
           </Link>
 
           {/* Desktop Navigation */}

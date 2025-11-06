@@ -17,6 +17,30 @@ const generateOrderNumber = () => {
 export const processCheckout = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { delivery_address_id } = req.body;
+
+    // Validate delivery address
+    if (!delivery_address_id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Delivery address is required'
+      });
+    }
+
+    // Verify address belongs to user
+    const { data: address, error: addressError } = await supabase
+      .from('addresses')
+      .select('*')
+      .eq('id', delivery_address_id)
+      .eq('user_id', userId)
+      .single();
+
+    if (addressError || !address) {
+      return res.status(404).json({
+        success: false,
+        error: 'Invalid delivery address'
+      });
+    }
 
     // Get user's cart with items
     const { data: cart, error: cartError } = await supabase
@@ -114,7 +138,8 @@ export const processCheckout = async (req, res) => {
         user_id: userId,
         order_number: orderNumber,
         total_amount: totalAmount,
-        status: 'pending'
+        status: 'pending',
+        delivery_address_id: delivery_address_id
       })
       .select()
       .single();
@@ -228,6 +253,17 @@ export const getUserOrders = async (req, res) => {
         status,
         created_at,
         delivered_at,
+        delivery_address_id,
+        addresses (
+          id,
+          name,
+          phone,
+          address_line1,
+          address_line2,
+          city,
+          state,
+          pincode
+        ),
         order_items (
           id,
           item_name,
@@ -273,6 +309,17 @@ export const getOrderByNumber = async (req, res) => {
         status,
         created_at,
         delivered_at,
+        delivery_address_id,
+        addresses (
+          id,
+          name,
+          phone,
+          address_line1,
+          address_line2,
+          city,
+          state,
+          pincode
+        ),
         order_items (
           id,
           item_id,
@@ -324,6 +371,17 @@ export const getAllOrders = async (req, res) => {
         status,
         created_at,
         delivered_at,
+        delivery_address_id,
+        addresses (
+          id,
+          name,
+          phone,
+          address_line1,
+          address_line2,
+          city,
+          state,
+          pincode
+        ),
         order_items (
           id,
           item_name,
@@ -354,8 +412,8 @@ export const getAllOrders = async (req, res) => {
         return {
           ...order,
           user_email: userData?.email || 'Unknown',
+          delivery_address: order.addresses || null,
           items: order.order_items,
-          delivery_address: null, // Will be added when schema is updated
           payment_method: 'COD' // Default payment method
         };
       })

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ordersApi } from '../lib/api';
-import { Package, Clock, CheckCircle, Loader2, Truck, ShoppingBag, Calendar, ChevronRight } from 'lucide-react';
+import { Package, Clock, CheckCircle, Loader2, Truck, ShoppingBag, Calendar, ChevronRight, MapPin } from 'lucide-react';
 
 export default function Orders() {
   const { user } = useAuth();
@@ -247,7 +247,7 @@ export default function Orders() {
                   <div className="text-right">
                     <p className="text-sm text-gray-600 mb-1">Total Amount</p>
                     <p className="text-3xl font-bold text-brand">
-                      ${parseFloat(order.total_amount).toFixed(2)}
+                      ₹{Math.round(parseFloat(order.total_amount))}
                     </p>
                   </div>
                 </div>
@@ -255,6 +255,27 @@ export default function Orders() {
 
               {/* Order Body */}
               <div className="px-6 py-4">
+                {/* Delivery Address */}
+                {order.addresses && (
+                  <div className="mb-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
+                    <h4 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                      <MapPin className="w-5 h-5" />
+                      Delivery Address
+                    </h4>
+                    <div className="text-blue-800">
+                      <p className="font-semibold">{order.addresses.name}</p>
+                      <p className="text-sm">{order.addresses.phone}</p>
+                      <p className="text-sm">
+                        {order.addresses.address_line1}
+                        {order.addresses.address_line2 && `, ${order.addresses.address_line2}`}
+                      </p>
+                      <p className="text-sm">
+                        {order.addresses.city}, {order.addresses.state} - {order.addresses.pincode}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Delivery Status */}
                 {order.delivered_at && (
                   <div className="mb-4 bg-green-50 border border-green-200 rounded-xl p-4">
@@ -304,7 +325,7 @@ export default function Orders() {
                           <span className="font-medium text-gray-800">{item.item_name}</span>
                         </div>
                         <span className="font-bold text-gray-800">
-                          ${(parseFloat(item.price_at_purchase) * item.quantity).toFixed(2)}
+                          ₹{Math.round(parseFloat(item.price_at_purchase) * item.quantity)}
                         </span>
                       </div>
                     ))}
