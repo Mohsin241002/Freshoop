@@ -158,7 +158,7 @@ export const getItemById = async (req, res) => {
  */
 export const createItem = async (req, res) => {
   try {
-    const { name, description, category_id, price, stock_quantity, is_available } = req.body;
+    const { name, description, category_id, price, stock_quantity, is_available, image_url, unit } = req.body;
 
     // Validation
     if (!name || !category_id || !price) {
@@ -197,10 +197,13 @@ export const createItem = async (req, res) => {
     }
 
     // Handle image upload if file is provided
-    let imageUrl = null;
+    let finalImageUrl = null;
     if (req.file) {
       const imageData = await uploadImage(req.file);
-      imageUrl = imageData.url;
+      finalImageUrl = imageData.url;
+    } else if (image_url) {
+      // Image URL provided directly (from frontend upload to Supabase)
+      finalImageUrl = image_url;
     }
 
     // Create item
@@ -212,8 +215,9 @@ export const createItem = async (req, res) => {
         category_id,
         price: parseFloat(price),
         stock_quantity: stock_quantity ? parseInt(stock_quantity) : 0,
-        image_url: imageUrl,
-        is_available: is_available !== undefined ? is_available === 'true' : true
+        unit: unit || 'kg',
+        image_url: finalImageUrl,
+        is_available: is_available !== undefined ? (is_available === 'true' || is_available === true) : true
       }])
       .select(`
         *,
@@ -248,16 +252,28 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, category_id, price, stock_quantity, is_available } = req.body;
+    const { name, description, category_id, price, stock_quantity, is_available, image_url, unit } = req.body;
 
-    // Get existing item
+    console.log('=== UPDATE ITEM REQUEST ===');
+    console.log('Item ID:', id);
+    console.log('Request body:', req.body);
+
+    // Get existing item - simplified query
     const { data: existingItem, error: fetchError } = await supabase
       .from('items')
-      .select('*')
+      .select('id, name, stock_quantity, category_id, image_url, unit')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
-    if (fetchError || !existingItem) {
+    console.log('Existing item:', existingItem);
+    console.log('Fetch error:', fetchError);
+
+    if (fetchError) {
+      console.error('Error fetching item:', fetchError);
+      throw fetchError;
+    }
+
+    if (!existingItem) {
       return res.status(404).json({
         success: false,
         error: 'Item not found'
@@ -295,7 +311,7 @@ export const updateItem = async (req, res) => {
     }
 
     // Handle image upload if new file is provided
-    let imageUrl = existingItem.image_url;
+    let finalImageUrl = existingItem.image_url;
     if (req.file) {
       // Delete old image
       if (existingItem.image_url) {
@@ -303,7 +319,10 @@ export const updateItem = async (req, res) => {
       }
       // Upload new image
       const imageData = await uploadImage(req.file);
-      imageUrl = imageData.url;
+      finalImageUrl = imageData.url;
+    } else if (image_url) {
+      // Image URL provided directly (from frontend upload to Supabase)
+      finalImageUrl = image_url;
     }
 
     // Prepare update data
@@ -314,31 +333,58 @@ export const updateItem = async (req, res) => {
     if (name) updateData.name = name.trim();
     if (description !== undefined) updateData.description = description?.trim() || null;
     if (category_id) updateData.category_id = category_id;
-    if (price) updateData.price = parseFloat(price);
+    if (price !== undefined) updateData.price = parseFloat(price);
     if (stock_quantity !== undefined) updateData.stock_quantity = parseInt(stock_quantity);
-    if (is_available !== undefined) updateData.is_available = is_available === 'true';
-    if (req.file) updateData.image_url = imageUrl;
+    if (is_available !== undefined) updateData.is_available = is_available === 'true' || is_available === true;
+    if (unit) updateData.unit = unit;
+    if (finalImageUrl) updateData.image_url = finalImageUrl;
 
-    // Update item
-    const { data, error } = await supabase
+    console.log('=== PERFORMING UPDATE ===');
+    console.log('Update data:', JSON.stringify(updateData, null, 2));
+
+    // Perform update
+    const { data: updatedItems, error: updateError } = await supabase
       .from('items')
       .update(updateData)
       .eq('id', id)
-      .select(`
-        *,
-        categories (
-          id,
-          name
-        )
-      `)
-      .single();
+      .select();
 
-    if (error) throw error;
+    console.log('Updated items:', updatedItems);
+    console.log('Update error:', updateError);
 
+    if (updateError) {
+      console.error('Update failed:', updateError);
+      throw updateError;
+    }
+
+    if (!updatedItems || updatedItems.length === 0) {
+      console.error('No rows updated!');
+      return res.status(404).json({
+        success: false,
+        error: 'Update failed - no rows affected'
+      });
+    }
+
+    const updatedItem = updatedItems[0];
+
+    // Fetch category info if needed
+    if (updatedItem.category_id) {
+      const { data: categoryData } = await supabase
+        .from('categories')
+        .select('id, name')
+        .eq('id', updatedItem.category_id)
+        .maybeSingle();
+      
+      if (categoryData) {
+        updatedItem.categories = categoryData;
+      }
+    }
+
+    console.log('=== UPDATE SUCCESS ===');
     res.status(200).json({
       success: true,
       message: 'Item updated successfully',
-      data: data
+      data: updatedItem
     });
   } catch (error) {
     console.error('Update item error:', error);

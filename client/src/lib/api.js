@@ -24,7 +24,13 @@ supabase.auth.onAuthStateChange((_event, session) => {
 });
 
 // Synchronous interceptor using cached session
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
+  // Try to get fresh session if currentSession is null
+  if (!currentSession) {
+    const { data: { session } } = await supabase.auth.getSession();
+    currentSession = session;
+  }
+  
   if (currentSession?.access_token) {
     config.headers.Authorization = `Bearer ${currentSession.access_token}`;
   }

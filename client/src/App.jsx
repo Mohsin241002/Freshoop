@@ -3,12 +3,14 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
+import AdminRoute from './components/AdminRoute';
 import Landing from './pages/Landing';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   console.log('App rendering...');
@@ -44,10 +46,20 @@ function App() {
 
               {/* Redirect old auth route */}
               <Route path="auth" element={<Navigate to="/login" replace />} />
+            </Route>
+
+            {/* Admin Routes (Outside main layout) */}
+            <Route
+              path="admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
 
               {/* 404 Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
           </Routes>
         </CartProvider>
       </AuthProvider>

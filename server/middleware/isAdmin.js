@@ -16,6 +16,12 @@ export const isAdmin = [
         ? process.env.ADMIN_EMAILS.split(',').map(email => email.trim().toLowerCase())
         : [];
 
+      // Debug logging
+      console.log('🔍 Admin Check:');
+      console.log('   User Email:', userEmail);
+      console.log('   Admin Emails:', adminEmails);
+      console.log('   Is Admin?', adminEmails.includes(userEmail.toLowerCase()));
+
       if (!adminEmails.length) {
         console.warn('⚠️  No admin emails configured in ADMIN_EMAILS environment variable');
         return res.status(500).json({
@@ -26,6 +32,7 @@ export const isAdmin = [
 
       // Check if user email is in admin list
       if (!adminEmails.includes(userEmail.toLowerCase())) {
+        console.log('❌ Access denied for:', userEmail);
         return res.status(403).json({
           success: false,
           error: 'Access denied. Admin privileges required.'
@@ -33,6 +40,7 @@ export const isAdmin = [
       }
 
       // User is admin, continue
+      console.log('✅ Admin access granted for:', userEmail);
       next();
     } catch (error) {
       console.error('Admin check error:', error);

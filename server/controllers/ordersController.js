@@ -342,10 +342,29 @@ export const getAllOrders = async (req, res) => {
 
     if (error) throw error;
 
+    // Get user emails for all orders
+    const ordersWithUserInfo = await Promise.all(
+      orders.map(async (order) => {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('email')
+          .eq('id', order.user_id)
+          .single();
+
+        return {
+          ...order,
+          user_email: userData?.email || 'Unknown',
+          items: order.order_items,
+          delivery_address: null, // Will be added when schema is updated
+          payment_method: 'COD' // Default payment method
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      count: orders.length,
-      data: orders
+      count: ordersWithUserInfo.length,
+      data: ordersWithUserInfo
     });
   } catch (error) {
     console.error('Get all orders error:', error);

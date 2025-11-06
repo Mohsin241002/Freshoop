@@ -210,6 +210,17 @@ export default function Login() {
                 </Link>
               </p>
             </div>
+
+            {/* Admin Access Button */}
+            <div className="mt-4 text-center">
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-brand transition-colors group"
+              >
+                <Shield className="w-4 h-4 group-hover:text-brand" />
+                <span className="font-semibold">Admin Portal Access</span>
+              </Link>
+            </div>
           </div>
 
           {/* Footer Note */}
