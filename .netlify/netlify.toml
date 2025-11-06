@@ -1,0 +1,70 @@
+functionsDirectory = "/Users/mohsin/Freshoop/netlify/functions"
+functionsDirectoryOrigin = "config"
+redirectsOrigin = "config"
+headers = []
+
+[build]
+publish = "/Users/mohsin/Freshoop/client/dist"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "cd client && npm ci && npm run build"
+functions = "/Users/mohsin/Freshoop/netlify/functions"
+
+[build.environment]
+NODE_VERSION = "20"
+NPM_FLAGS = "--legacy-peer-deps"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions."*"]
+external_node_modules = ["express", "serverless-http", "cors", "dotenv", "@supabase/supabase-js", "bcrypt", "jsonwebtoken", "multer"]
+included_files = ["server/**"]
+node_bundler = "esbuild"
+
+[[plugins]]
+origin = "ui"
+package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]
+
+[[plugins]]
+origin = "config"
+package = "@netlify/plugin-functions-install-core"
+
+[plugins.inputs]
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/api/:splat"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]

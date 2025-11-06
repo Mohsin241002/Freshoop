@@ -11,6 +11,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 }
 
 // Create Supabase client with service role key for backend operations
+// Service role key bypasses Row Level Security (RLS)
 export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
@@ -19,11 +20,6 @@ export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   },
   db: {
     schema: 'public'
-  },
-  global: {
-    headers: {
-      'apikey': supabaseServiceKey
-    }
   }
 });
 
