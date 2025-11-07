@@ -91,7 +91,7 @@ Create or update `client/.env`:
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_API_URL=http://localhost:3000/api
+VITE_API_URL=https://freshoop.onrender.com/api
 ```
 
 #### Server (.env)
@@ -134,7 +134,7 @@ cd server
 npm run dev
 ```
 
-The server will run on `http://localhost:3000`
+The server will run on `https://freshoop.onrender.com`
 
 #### Terminal 2 - Start the Frontend
 

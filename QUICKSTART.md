@@ -147,7 +147,7 @@ The app is fully responsive! Test on mobile:
 Use the Supabase Dashboard or API:
 
 ```bash
-POST http://localhost:3000/api/items
+POST https://freshoop.onrender.com/api/items
 {
   "name": "Organic Spinach",
   "description": "Fresh organic spinach leaves",

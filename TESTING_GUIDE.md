@@ -18,14 +18,14 @@ Step-by-step guide to test all endpoints including authentication, categories, i
 
 #### 1.1 Health Check
 ```bash
-curl http://localhost:3001/health
+curl https://freshoop.onrender.com/health
 ```
 
 **Expected**: 200 OK with server status
 
 #### 1.2 Get All Categories
 ```bash
-curl http://localhost:3001/api/categories
+curl https://freshoop.onrender.com/api/categories
 ```
 
 **Expected**: 6 categories (Fruits, Vegetables, Dairy & Eggs, Bakery, Meat & Seafood, Beverages)
@@ -33,14 +33,14 @@ curl http://localhost:3001/api/categories
 #### 1.3 Get Category by ID
 ```bash
 # Use ID from previous response
-curl http://localhost:3001/api/categories/CATEGORY_ID
+curl https://freshoop.onrender.com/api/categories/CATEGORY_ID
 ```
 
 **Expected**: Single category object
 
 #### 1.4 Get All Items
 ```bash
-curl http://localhost:3001/api/items
+curl https://freshoop.onrender.com/api/items
 ```
 
 **Expected**: 24 grocery items with category details
@@ -48,21 +48,21 @@ curl http://localhost:3001/api/items
 #### 1.5 Filter Items by Category
 ```bash
 # Get Fruits category ID first, then:
-curl "http://localhost:3001/api/items?category_id=FRUITS_CATEGORY_ID"
+curl "https://freshoop.onrender.com/api/items?category_id=FRUITS_CATEGORY_ID"
 ```
 
 **Expected**: Only fruit items (Apples, Bananas, Oranges, Strawberries, Grapes)
 
 #### 1.6 Search Items
 ```bash
-curl "http://localhost:3001/api/items?search=apple"
+curl "https://freshoop.onrender.com/api/items?search=apple"
 ```
 
 **Expected**: Items containing "apple" in name
 
 #### 1.7 Get Item by ID
 ```bash
-curl http://localhost:3001/api/items/ITEM_ID
+curl https://freshoop.onrender.com/api/items/ITEM_ID
 ```
 
 **Expected**: Single item with category details
@@ -73,7 +73,7 @@ curl http://localhost:3001/api/items/ITEM_ID
 
 #### 2.1 Register New User
 ```bash
-curl -X POST http://localhost:3001/api/auth/register \
+curl -X POST https://freshoop.onrender.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "testuser@example.com",
@@ -91,7 +91,7 @@ export TOKEN="paste_access_token_here"
 
 #### 2.2 Login
 ```bash
-curl -X POST http://localhost:3001/api/auth/login \
+curl -X POST https://freshoop.onrender.com/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "testuser@example.com",
@@ -103,7 +103,7 @@ curl -X POST http://localhost:3001/api/auth/login \
 
 #### 2.3 Get Current User
 ```bash
-curl http://localhost:3001/api/auth/me \
+curl https://freshoop.onrender.com/api/auth/me \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -111,7 +111,7 @@ curl http://localhost:3001/api/auth/me \
 
 #### 2.4 Get User Profile
 ```bash
-curl http://localhost:3001/api/users/profile \
+curl https://freshoop.onrender.com/api/users/profile \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -119,7 +119,7 @@ curl http://localhost:3001/api/users/profile \
 
 #### 2.5 Update Profile
 ```bash
-curl -X PUT http://localhost:3001/api/users/profile \
+curl -X PUT https://freshoop.onrender.com/api/users/profile \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"full_name": "Updated Name"}'
@@ -136,7 +136,7 @@ curl -X PUT http://localhost:3001/api/users/profile \
 # Get user ID from auth/me response
 export USER_ID="paste_user_id_here"
 
-curl http://localhost:3001/api/cart/$USER_ID \
+curl https://freshoop.onrender.com/api/cart/$USER_ID \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -147,7 +147,7 @@ curl http://localhost:3001/api/cart/$USER_ID \
 # Get item ID from items list
 export ITEM_ID="paste_item_id_here"
 
-curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
+curl -X POST https://freshoop.onrender.com/api/cart/$USER_ID/items \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -160,7 +160,7 @@ curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
 
 #### 3.3 Update Cart Item Quantity
 ```bash
-curl -X PUT http://localhost:3001/api/cart/$USER_ID/items/$ITEM_ID \
+curl -X PUT https://freshoop.onrender.com/api/cart/$USER_ID/items/$ITEM_ID \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"quantity": 5}'
@@ -170,7 +170,7 @@ curl -X PUT http://localhost:3001/api/cart/$USER_ID/items/$ITEM_ID \
 
 #### 3.4 Remove Item from Cart
 ```bash
-curl -X DELETE http://localhost:3001/api/cart/$USER_ID/items/$ITEM_ID \
+curl -X DELETE https://freshoop.onrender.com/api/cart/$USER_ID/items/$ITEM_ID \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -179,17 +179,17 @@ curl -X DELETE http://localhost:3001/api/cart/$USER_ID/items/$ITEM_ID \
 #### 3.5 Add Multiple Items
 ```bash
 # Add 3 different items
-curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
+curl -X POST https://freshoop.onrender.com/api/cart/$USER_ID/items \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"item_id": "ITEM_ID_1", "quantity": 2}'
 
-curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
+curl -X POST https://freshoop.onrender.com/api/cart/$USER_ID/items \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"item_id": "ITEM_ID_2", "quantity": 1}'
 
-curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
+curl -X POST https://freshoop.onrender.com/api/cart/$USER_ID/items \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"item_id": "ITEM_ID_3", "quantity": 3}'
@@ -201,7 +201,7 @@ curl -X POST http://localhost:3001/api/cart/$USER_ID/items \
 
 #### 4.1 Create Order from Cart
 ```bash
-curl -X POST http://localhost:3001/api/orders \
+curl -X POST https://freshoop.onrender.com/api/orders \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"user_id": "'$USER_ID'"}'
@@ -215,7 +215,7 @@ curl -X POST http://localhost:3001/api/orders \
 
 #### 4.2 Get User Orders
 ```bash
-curl http://localhost:3001/api/orders/user/$USER_ID \
+curl https://freshoop.onrender.com/api/orders/user/$USER_ID \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -225,7 +225,7 @@ curl http://localhost:3001/api/orders/user/$USER_ID \
 ```bash
 export ORDER_ID="paste_order_id_here"
 
-curl http://localhost:3001/api/orders/$ORDER_ID \
+curl https://freshoop.onrender.com/api/orders/$ORDER_ID \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -233,7 +233,7 @@ curl http://localhost:3001/api/orders/$ORDER_ID \
 
 #### 4.4 Update Order Status
 ```bash
-curl -X PUT http://localhost:3001/api/orders/$ORDER_ID/status \
+curl -X PUT https://freshoop.onrender.com/api/orders/$ORDER_ID/status \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"status": "delivered"}'
@@ -254,7 +254,7 @@ ADMIN_EMAILS=admin@freshoop.com
 
 Restart server, then register/login with admin email:
 ```bash
-curl -X POST http://localhost:3001/api/auth/register \
+curl -X POST https://freshoop.onrender.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@freshoop.com",
@@ -270,7 +270,7 @@ export ADMIN_TOKEN="paste_admin_token_here"
 
 #### 5.2 Create Category
 ```bash
-curl -X POST http://localhost:3001/api/categories \
+curl -X POST https://freshoop.onrender.com/api/categories \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -285,7 +285,7 @@ curl -X POST http://localhost:3001/api/categories \
 ```bash
 export CATEGORY_ID="paste_new_category_id_here"
 
-curl -X PUT http://localhost:3001/api/categories/$CATEGORY_ID \
+curl -X PUT https://freshoop.onrender.com/api/categories/$CATEGORY_ID \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -298,7 +298,7 @@ curl -X PUT http://localhost:3001/api/categories/$CATEGORY_ID \
 
 #### 5.4 Create Item (Text Only)
 ```bash
-curl -X POST http://localhost:3001/api/items \
+curl -X POST https://freshoop.onrender.com/api/items \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -316,7 +316,7 @@ curl -X POST http://localhost:3001/api/items \
 #### 5.5 Create Item with Image
 ```bash
 # Create a test image file first or use an existing one
-curl -X POST http://localhost:3001/api/items \
+curl -X POST https://freshoop.onrender.com/api/items \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -F "name=Ice Cream" \
   -F "description=Premium vanilla ice cream" \
@@ -333,7 +333,7 @@ curl -X POST http://localhost:3001/api/items \
 ```bash
 export ITEM_ID="paste_item_id_here"
 
-curl -X PUT http://localhost:3001/api/items/$ITEM_ID \
+curl -X PUT https://freshoop.onrender.com/api/items/$ITEM_ID \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -F "name=Premium Ice Cream" \
   -F "price=7.99" \
@@ -344,7 +344,7 @@ curl -X PUT http://localhost:3001/api/items/$ITEM_ID \
 
 #### 5.7 Update Stock Only
 ```bash
-curl -X PATCH http://localhost:3001/api/items/$ITEM_ID/stock \
+curl -X PATCH https://freshoop.onrender.com/api/items/$ITEM_ID/stock \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"stock_quantity": 150}'
@@ -354,7 +354,7 @@ curl -X PATCH http://localhost:3001/api/items/$ITEM_ID/stock \
 
 #### 5.8 Delete Item
 ```bash
-curl -X DELETE http://localhost:3001/api/items/$ITEM_ID \
+curl -X DELETE https://freshoop.onrender.com/api/items/$ITEM_ID \
   -H "Authorization: Bearer $ADMIN_TOKEN"
 ```
 
@@ -363,7 +363,7 @@ curl -X DELETE http://localhost:3001/api/items/$ITEM_ID \
 #### 5.9 Try to Delete Category with Items
 ```bash
 # Try to delete a category that has items
-curl -X DELETE http://localhost:3001/api/categories/FRUITS_CATEGORY_ID \
+curl -X DELETE https://freshoop.onrender.com/api/categories/FRUITS_CATEGORY_ID \
   -H "Authorization: Bearer $ADMIN_TOKEN"
 ```
 
@@ -371,7 +371,7 @@ curl -X DELETE http://localhost:3001/api/categories/FRUITS_CATEGORY_ID \
 
 #### 5.10 Delete Empty Category
 ```bash
-curl -X DELETE http://localhost:3001/api/categories/$CATEGORY_ID \
+curl -X DELETE https://freshoop.onrender.com/api/categories/$CATEGORY_ID \
   -H "Authorization: Bearer $ADMIN_TOKEN"
 ```
 
@@ -383,7 +383,7 @@ curl -X DELETE http://localhost:3001/api/categories/$CATEGORY_ID \
 
 #### 6.1 Try Admin Action Without Token
 ```bash
-curl -X POST http://localhost:3001/api/categories \
+curl -X POST https://freshoop.onrender.com/api/categories \
   -H "Content-Type: application/json" \
   -d '{"name": "Test"}'
 ```
@@ -393,7 +393,7 @@ curl -X POST http://localhost:3001/api/categories \
 #### 6.2 Try Admin Action as Regular User
 ```bash
 # Use regular user token (not admin)
-curl -X POST http://localhost:3001/api/categories \
+curl -X POST https://freshoop.onrender.com/api/categories \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name": "Test"}'
@@ -403,7 +403,7 @@ curl -X POST http://localhost:3001/api/categories \
 
 #### 6.3 Try Invalid Image Type
 ```bash
-curl -X POST http://localhost:3001/api/items \
+curl -X POST https://freshoop.onrender.com/api/items \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -F "name=Test" \
   -F "category_id=$CATEGORY_ID" \

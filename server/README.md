@@ -25,7 +25,7 @@ npm install
 npm run dev
 ```
 
-Runs on `http://localhost:3000` with auto-reload
+Runs on `https://freshoop.onrender.com` with auto-reload
 
 ## 🏗️ Production
 

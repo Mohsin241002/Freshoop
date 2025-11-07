@@ -1,8 +1,5 @@
-# Redirects for Netlify deployment
-# API calls are proxied to Render backend, other routes handled by React Router
+# Redirects for client-side routing
+# All routes handled by React Router
 
-# Proxy API calls to Render backend
-/api/*  https://freshoop.onrender.com/api/:splat  200
-
-# Redirect all other routes to index.html for client-side routing
+# Redirect all routes to index.html for client-side routing
 /*    /index.html   200

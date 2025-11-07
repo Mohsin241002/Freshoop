@@ -25,15 +25,9 @@ const PORT = process.env.PORT || 3001;
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
   process.env.FRONTEND_URL,
-  // Vercel domains
-  /https:\/\/.*\.vercel\.app$/,
   // Render.com domains
-  /https:\/\/.*\.onrender\.com$/,
-  // Netlify domains (if still needed)
-  /https:\/\/.*\.netlify\.app$/
+  /https:\/\/.*\.onrender\.com$/
 ].filter(Boolean);
 
 const corsOptions = {
@@ -153,7 +147,7 @@ app.listen(PORT, () => {
   console.log('\x1b[36m%s\x1b[0m', '=================================');
   console.log('\x1b[32m%s\x1b[0m', `✓ Server running on port ${PORT}`);
   console.log('\x1b[36m%s\x1b[0m', `✓ Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('\x1b[36m%s\x1b[0m', `✓ Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+  console.log('\x1b[36m%s\x1b[0m', `✓ Frontend URL: ${process.env.FRONTEND_URL || 'Not configured'}`);
   console.log('\x1b[36m%s\x1b[0m', '=================================');
 });
 

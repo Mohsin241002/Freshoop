@@ -126,7 +126,7 @@ Once the deployment completes, test the following in the admin section:
 
 **Site:** Freshoop
 **Site ID:** f0c4f7bb-46ad-4529-b538-6d5601f773e3
-**URL:** https://freshoop.netlify.app
+**URL:** http://localhost:5173
 **Latest Deploy:** Building (check monitor URL above)
 
 ## Environment Variables (Verified)

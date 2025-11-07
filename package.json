@@ -13,7 +13,6 @@
     "dev:server": "cd server && npm run dev",
     "start": "cd server && npm start",
     "start:server": "cd server && npm start",
-    "vercel-build": "cd client && npm install && npm run build",
     "render:deploy": "./deploy-render.sh"
   },
   "keywords": ["food-ordering", "e-commerce", "react", "express"],

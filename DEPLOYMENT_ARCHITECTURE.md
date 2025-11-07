@@ -193,10 +193,10 @@ npm run dev  # Runs on http://localhost:5173
 # Backend
 cd server
 npm install
-npm run dev  # Runs on http://localhost:3001
+npm run dev  # Runs on https://freshoop.onrender.com
 
 # Frontend uses proxy in vite.config.js:
-# /api/* -> http://localhost:3001/api/*
+# /api/* -> https://freshoop.onrender.com/api/*
 ```
 
 ### Production
