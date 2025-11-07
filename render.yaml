@@ -34,7 +34,7 @@ services:
     staticPublishPath: client/dist
     envVars:
       - key: VITE_API_URL
-        value: https://freshoop.onrender.com
+        value: https://freshoop.onrender.com/api
       - key: VITE_SUPABASE_URL
         sync: false
       - key: VITE_SUPABASE_ANON_KEY
