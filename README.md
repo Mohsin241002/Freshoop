@@ -319,25 +319,26 @@ JWT_SECRET=your_jwt_secret
 ADMIN_EMAILS=your_admin_email
 ```
 
-**Frontend Service (freshoop-client):**
-```env
-VITE_API_URL=https://freshoop-api.onrender.com/api
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_anon_key
-VITE_PEXELS_API_KEY=your_pexels_key
-```
+### Netlify Deployment (Recommended Frontend Host)
 
-### Alternative: Vercel Deployment
+**Frontend on Netlify + Backend on Render**
 
-For deploying the frontend to Vercel with Render backend:
+The recommended setup uses:
+- **Frontend:** Netlify (static hosting with CDN)
+- **Backend:** Render (already running at https://freshoop.onrender.com)
 
-1. **Backend:** Already running on Render at https://freshoop.onrender.com
-2. **Frontend:** Deploy to Vercel
+1. **Deploy to Netlify:**
    ```bash
-   cd client
-   npm run build
+   # Install Netlify CLI
+   npm install -g netlify-cli
+   
+   # Login and deploy
+   netlify login
+   netlify init
+   netlify deploy --prod
    ```
-3. **Set environment variables in Vercel:**
+
+2. **Set environment variables in Netlify Dashboard:**
    ```env
    VITE_API_URL=https://freshoop.onrender.com/api
    VITE_SUPABASE_URL=your_supabase_url
@@ -345,9 +346,27 @@ For deploying the frontend to Vercel with Render backend:
    VITE_PEXELS_API_KEY=your_pexels_key
    ```
 
-📖 **Full Vercel deployment guide:** See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions.
+3. **Configuration:**
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+   - Base directory: `client`
 
-### Alternative: Other Static Hosts (Netlify, Cloudflare Pages, etc.)
+📖 **Full Netlify deployment guide:** See [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) for detailed instructions.
+
+### Alternative: Vercel Deployment
+
+For deploying the frontend to Vercel with Render backend:
+
+1. **Backend:** Already running on Render at https://freshoop.onrender.com
+2. **Frontend:** Deploy to Vercel (not recommended due to platform limitations)
+   ```bash
+   cd client
+   npm run build
+   ```
+
+📖 **Note:** Vercel has strict serverless function limits on free tier. Netlify is recommended for this project.
+
+### Alternative: Other Static Hosts (Cloudflare Pages, etc.)
 
 1. Build the frontend: `cd client && npm run build`
 2. Deploy the `client/dist` folder to your preferred static hosting service
